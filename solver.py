@@ -84,7 +84,9 @@ solver = Solver(board)
 # RUN THE SOLVER
 solver.initialize()
 solver.run()
+
+# Output the board as viewed by the solver
 print_solver_view(board)
 
 
-# First click function needs to be made (probably in Generator) 
+# First click function still needs to be made (probably in Generator) 
