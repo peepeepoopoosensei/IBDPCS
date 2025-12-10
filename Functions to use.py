@@ -48,3 +48,27 @@ def select_square(self, x=None, y=None, cell=None):
                 q.append(n)
 
     return revealed_cells
+
+
+def print_board(board, show_bombs=False):
+    """
+    Print a simple textual representation:
+      - unrevealed: '#'
+      - revealed 0: ' '
+      - revealed >0: digit
+      - bomb (if show_bombs True): '*'
+    """
+    for y in range(board.height):
+        row = []
+        for x in range(board.width):
+            c = board.grid[y][x]
+            if c.revealed:
+                if c.isBomb:
+                    ch = '*'
+                else:
+                    ch = ' ' if c.num == 0 else str(c.num)
+            else:
+                ch = '*' if (show_bombs and c.isBomb) else '#'
+            row.append(ch)
+        print(' '.join(row))
+    print()
