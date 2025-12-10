@@ -5,7 +5,7 @@ import random
 
 class Cell:
    def __init__(self, board, x, y):
-       # initialising
+       # initializing
        self.board = board
        self.x = x
        self.y = y
@@ -22,7 +22,14 @@ class Cell:
        if self.isBomb:
            return -1
        return sum(1 for neighbor in self.board.neighbors(self) if neighbor.bomb)
-       # adds 1 to total if neighbour is bomb, using neighbours() method to yield all neighbours
+       # adds 1 to total if neighbor is bomb, using neighbors() method to yield all neighbors
+   @property
+   def isUnknown(self):
+        return not self.revealed and not self.isFlagged
+
+   @property
+   def isNumber(self):
+        return self.revealed and not self.isBomb
 
 
 
