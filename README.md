@@ -1,3 +1,2 @@
-IB CS Group Project 
-not the IA 
-Will brainstorm
+IB CS Group Project: MINDSWEEPER; 
+Progress: 67%
