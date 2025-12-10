@@ -1,4 +1,5 @@
 # select square + 0 fill
+from collections import deque
 def select_square(self, x=None, y=None, cell=None):
     """
     Reveal a cell by coordinates (x,y) or by passing a Cell via cell=.
