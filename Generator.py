@@ -21,6 +21,14 @@ class Cell:
             return '*'
         return sum(1 for neighbor in self.board.neighbors(self) if neighbor.isBomb)
         # adds 1 to total if neighbour is bomb, using neighbours() method to yield all neighbours
+    
+    @property
+    def isUnknown(self):
+            return not self.revealed and not self.isFlagged
+
+    @property
+    def isNumber(self):
+            return self.revealed and not self.isBomb
 
 
 class Board:
@@ -120,3 +128,4 @@ class Board:
                 row.append(ch)
             print(' '.join(row))
         print()
+

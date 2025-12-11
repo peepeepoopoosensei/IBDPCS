@@ -1,14 +1,9 @@
 
 from Generator import Board  # your solver file
 
-# Example first click
-first_click = (2, 3)
-
-# CREATE THE BOARD INSTANCE (this fixes "board is undefined")
-board = Board(10,10,10, first_click)
-
 class Solver:
      def __init__(self, board):
+          self.num_bombs = 0
           self.board = board
           self.outdated = []  # collection of outdated numbered cells
 
@@ -61,32 +56,48 @@ class Solver:
                               if adjacents[j].isNumber and adjacents[j] not in self.outdated:
                                    self.outdated.append(adjacents[j])
 
+# Output the board as viewed by the solver
+     def print_solver_view(self):
+          for y in range(self.board.height):
+               row = []
+               for x in range(self.board.width):
+                    cell = self.board.grid[y][x]
+                    if cell.isFlagged:
+                         row.append("💥")
+                         self.num_bombs += 1
+                    elif cell.revealed:
+                         row.append(str(cell.num))
+                    else:
+                         row.append("?")
+               print(" ".join(row))
+          print()
+          print(f"Number of BOMBS found: {self.num_bombs} out of {self.board.bomb_count}")
+          print()
 
-def print_solver_view(board):
-     for y in range(board.height):
-          row = []
-          for x in range(board.width):
-               cell = board.grid[y][x]
-               if cell.isFlagged:
-                    row.append("F")
-               elif cell.revealed:
-                    row.append(str(cell.num))
-               else:
-                    row.append("?")
-          print(" ".join(row))
-     print()
+# ---- TEST SETUP ----
 
+first_click = (2, 3)
+board = Board(20, 20, 15, first_click)
 
+print("REAL BOARD (with bombs hidden):")
+board.print_board(show_bombs=False)
 
-# CREATE THE SOLVER AND PASS THE BOARD
+print("REAL BOARD (with bombs visible - DEBUG):")
+board.print_board(show_bombs=True)
+
 solver = Solver(board)
 
-# RUN THE SOLVER
+print("INITIAL SOLVER VIEW:")
+solver.print_solver_view()
+
+
 solver.initialize()
 solver.run()
 
-# Output the board as viewed by the solver
-print_solver_view(board)
+print("FINAL SOLVER VIEW:")
 
 
-# First click function still needs to be made (probably in Generator) 
+solver.print_solver_view()
+
+print("FINAL REAL BOARD (DEBUG):")
+board.print_board(show_bombs=True)
