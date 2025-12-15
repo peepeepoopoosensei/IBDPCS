@@ -216,10 +216,10 @@ class SolverVisualizerGUI(QMainWindow):
         if os.path.exists('Icon.png'):
             self.setWindowIcon(QIcon('Icon.png'))
         
-        # Create board and solver
+        # Create board and solver (parameters)
         self.width = 10
         self.height = 10
-        self.bomb_count = 10
+        self.bomb_count = 20
         first_click = (5, 5)
         
         self.board = Board(self.width, self.height, self.bomb_count, first_click)

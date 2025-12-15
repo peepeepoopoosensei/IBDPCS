@@ -127,7 +127,7 @@ class MinesweeperGUI(QMainWindow):
         # Game parameters
         self.width = 10
         self.height = 10
-        self.bomb_count = 10
+        self.bomb_count = 25
         self.board = None
         self.buttons = {}
         self.first_click = True
@@ -264,7 +264,7 @@ class MinesweeperGUI(QMainWindow):
 
                         if not mine_pixmap.isNull():
                             scaled_mine = mine_pixmap.scaled(40, 40, Qt.AspectRatioMode.KeepAspectRatio,
-                                                             Qt.TransformationMode.SmoothTransformation)
+                                                            Qt.TransformationMode.SmoothTransformation)
                             btn.setIcon(QIcon(scaled_mine))
                             btn.setIconSize(QSize(40, 40))
                         btn.setStyleSheet("""
