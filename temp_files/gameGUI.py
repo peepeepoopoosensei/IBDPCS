@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QV
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
 import random
+from pathlib import Path
 from collections import deque
 from generator import Board
 
@@ -41,9 +42,10 @@ class MinesweeperGUI(QMainWindow):
           self.setWindowTitle('MindSweeper Game')
 
           # Load icon
-          import os
-          if os.path.exists('Icon.png'):
-               self.setWindowIcon(QIcon('Icon.png'))
+          ASSETS_DIR = Path(__file__).resolve().parent
+          icon_path = ASSETS_DIR / "Icon.png"
+          if icon_path.exists():
+               self.setWindowIcon(QIcon(str(icon_path)))
 
           # Game parameters
           self.width = 10
@@ -54,8 +56,7 @@ class MinesweeperGUI(QMainWindow):
           self.first_click = True
 
           # Load cell image
-          import os
-          self.cell_pixmap = QPixmap('preview.png')
+          self.cell_pixmap = QPixmap(str(ASSETS_DIR / "preview.png"))
           if self.cell_pixmap.isNull():
                print("Warning: preview.png not found!")
 
