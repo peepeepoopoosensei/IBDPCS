@@ -2,7 +2,7 @@ import sys
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout, QVBoxLayout, QHBoxLayout, QPushButton, QLabel)
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
-from pathlib import Path
+
 from generator import Board
 from solverTrace import TracedSolver
 
@@ -32,12 +32,9 @@ class SolverVisualizerGUI(QMainWindow):
           self.setWindowTitle('MindSweeper Solver')
 
           # Load icon
-          ASSETS_DIR = Path(__file__).resolve().parent   # folder where this .py lives
-          preview_path = ASSETS_DIR / "preview.png"
-
-          self.cell_pixmap = QPixmap(str(preview_path))
-          if self.cell_pixmap.isNull():
-               print("Warning: preview.png not found at:", preview_path)
+          import os
+          if os.path.exists('Icon.png'):
+               self.setWindowIcon(QIcon('Icon.png'))
 
           # Parameters
           self.width = 10
@@ -47,11 +44,7 @@ class SolverVisualizerGUI(QMainWindow):
 
           self.current_step = 0
           self.buttons = {}
-
-          # Load cell image
-          icon_path = ASSETS_DIR / "Icon.png"
-          if icon_path.exists():
-               self.setWindowIcon(QIcon(str(icon_path)))
+          self.cell_pixmap = QPixmap('preview.png')
 
           self.setup_ui()  # creates step_label, buttons, etc.
           self.new_board()  # builds board+solver and calls display_step()
@@ -203,7 +196,6 @@ class SolverVisualizerGUI(QMainWindow):
                for x in range(self.width):
                     cell_state = step.board_state[y][x]
                     btn = self.buttons[(x, y)]
-                    btn.setText("")
 
                     # Check if this is the highlighted cell
                     is_highlighted = (step.cell_xy == (x, y))
@@ -249,32 +241,22 @@ class SolverVisualizerGUI(QMainWindow):
                          }}
                          """)
                     else:
-                         # Unknown cell (covered)
-                         btn.setText("")
-
-                         # Always apply a covered style (even if icon missing)
-                         border = '3px solid #00aa00' if is_highlighted else 'none'
-                         btn.setStyleSheet(f"""
-                         QPushButton {{
-                              background-color: #cfcfcf;
-                              border: {border};
-                              padding: 0px;
-                              margin: 0px;
-                         }}
-                         """)
-
-                         # Then try to show the covered-tile image
+                         # Unknown cell
+                         btn.setText('')
                          if not self.cell_pixmap.isNull():
-                              scaled_pixmap = self.cell_pixmap.scaled(
-                                   40, 40,
-                                   Qt.AspectRatioMode.IgnoreAspectRatio,
-                                   Qt.TransformationMode.SmoothTransformation
-                              )
+                              scaled_pixmap = self.cell_pixmap.scaled(40, 40, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
                               btn.setIcon(QIcon(scaled_pixmap))
                               btn.setIconSize(QSize(40, 40))
-                         else:
-                              # If image missing, make sure icon is cleared (so it doesn't keep old icons)
-                              btn.setIcon(QIcon())
+                              
+                              border = '3px solid #00aa00' if is_highlighted else 'none'
+                              btn.setStyleSheet(f"""
+                              QPushButton {{
+                                   background-color: transparent;
+                                   border: {border};
+                                   padding: 0px;
+                                   margin: 0px;
+                              }}
+                              """)
 
           # Update button states
           self.prev_btn.setEnabled(self.current_step > 0)
