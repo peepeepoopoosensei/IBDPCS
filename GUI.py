@@ -45,5 +45,5 @@ app.setStyleSheet('''
 window = MyApp()
 window.show()
 sys.exit(app.exec())
-# makes it so the app execution after it is closed closes the process aswell
+# makes it so the app execution after it is closed closes the process as well
 

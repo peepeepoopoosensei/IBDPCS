@@ -1,5 +1,3 @@
-
-from Generator import Board
 from collections import deque
 
 
@@ -106,11 +104,13 @@ class Solver:
                          continue
                     if k == len(D):  # all cells in D are bombs
                          # flag all cells in D and enqueue in outdated, for each flagged cell, its adjacent numbered cells
-                         for c in D: self.flagCell(c)
+                         for c in D:
+                              self.flagCell(c)
                          return True
                     elif k == 0:  # all cells in D are safe
                          # reveal all cells in D and enqueue in outdated, for each revealed cell, itself if numbered and its adjacent numbered cells
-                         for c in D: self.revealCell(c)
+                         for c in D:
+                              self.revealCell(c)
                          return True
           return False
 
@@ -135,92 +135,3 @@ class Solver:
                # pick one cell, delete it & analyse it
                cell = self.dequeue_outdated()
                self.analyseCell(cell)
-          print("Finished")
-
-     # Output the board as viewed by the solver
-     def print_solver_view(self):
-          for y in range(self.board.height):
-               row = []
-               for x in range(self.board.width):
-                    cell = self.board.grid[y][x]
-                    if cell.isFlagged:
-                         row.append('\033[31m*\033[0m')
-                         self.num_bombs += 1
-                    elif cell.revealed:
-                         if cell.num == 0:
-                              row.append(str(cell.num))
-                         else:
-                              row.append(f'\033[37;44m{str(cell.num)}\033[0m')
-                    else:
-                         row.append("?")
-               print(" ".join(row))
-          print()
-          print(f"Number of BOMBS found: {self.num_bombs} out of {self.board.bomb_count}")
-          print()
-
-# helper function by Mr. Chat to debug multi-cell analysis of num. cells
-def debug_find_tier2_moves(solver):
-     frontier = []
-     for y in range(solver.board.height):
-          for x in range(solver.board.width):
-               A = solver.board.grid[y][x]
-               if not A.isNumber:
-                    continue
-               _, nA, fA, UA, uA, bA = solver.cell_notation(A)
-               if uA == 0:
-                    continue
-               frontier.append((A, UA, bA))
-
-     found = 0
-     for i in range(len(frontier)):
-          A, UA, bA = frontier[i]
-          for j in range(len(frontier)):
-               if i == j:
-                    continue
-               B, UB, bB = frontier[j]
-
-               # proper subset only (your code uses <)
-               if not (UA < UB):
-                    continue
-
-               D = UB - UA
-               k = bB - bA
-               if k == 0 or k == len(D):
-                    found += 1
-                    print("ACTIONABLE Tier-2 pair:")
-                    print(f" A=({A.x},{A.y}) bA={bA} |UA|={len(UA)}")
-                    print(f" B=({B.x},{B.y}) bB={bB} |UB|={len(UB)}")
-                    print(f" D size={len(D)} k={k} -> {'REVEAL D' if k==0 else 'FLAG D'}")
-                    print(" D coords:", sorted([(c.x, c.y) for c in D]))
-                    print()
-
-     print(f"Total actionable Tier-2 moves available: {found}")
-
-# ---- TEST SETUP ----
-
-first_click = (2, 3)
-board = Board(30, 30, 150, first_click)
-
-print("REAL BOARD (with bombs hidden):")
-board.print_board(show_bombs=False)
-
-print("REAL BOARD (with bombs visible - DEBUG):")
-board.print_board(show_bombs=True)
-
-solver = Solver(board)
-
-print("INITIAL SOLVER VIEW:")
-solver.print_solver_view()
-
-
-solver.initialize()
-solver.run()
-
-print("FINAL SOLVER VIEW:")
-solver.print_solver_view()
-
-print("FINAL REAL BOARD (DEBUG):")
-board.print_board(show_bombs=True)
-
-print("DEBUG")
-debug_find_tier2_moves(solver)

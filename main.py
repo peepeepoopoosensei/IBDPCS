@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QGridLayout,
-                             QVBoxLayout, QPushButton, QLabel)
+                            QVBoxLayout, QPushButton, QLabel)
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt, QSize
 import random
@@ -127,7 +127,7 @@ class MinesweeperGUI(QMainWindow):
         # Game parameters
         self.width = 10
         self.height = 10
-        self.bomb_count = 25
+        self.bomb_count = 15
         self.board = None
         self.buttons = {}
         self.first_click = True
